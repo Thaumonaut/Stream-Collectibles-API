@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "tsx watch --no-cache server/index.ts",
+    "build": "pnpm install",
     "start": "tsx server/index.ts"
   },
   "dependencies": {
