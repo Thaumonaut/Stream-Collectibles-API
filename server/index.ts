@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { secureHeaders } from 'hono/secure-headers'
 import { trimTrailingSlash } from 'hono/trailing-slash'
 import 'dotenv/config'
 
@@ -12,6 +13,7 @@ const app = new Hono()
 
 app.get('/', c => c.html("<h1>Welcome to Stream Colletibles</h1><p>To use the api go to '/api' to get started</p>"))
 
+app.use(secureHeaders())
 app.use(trimTrailingSlash())
 app.use('*', cors({
   origin: '*',
@@ -23,7 +25,7 @@ app.get('/api', (c) => {
   return c.text("Welcome to the Stream Collectables API")
 })
 
-app.get('/api/2/boogaloo', c => c.text('Testing api 2'))
+app.get('/api/2/electric-boogaloo', c => c.text('Testing api 2'))
 
 
 app.route('/api/collectables', collectableRoute)
