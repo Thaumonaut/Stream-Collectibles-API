@@ -1,11 +1,8 @@
 import { createSignal, createEffect, Show } from 'solid-js'
 import './App.css'
 import type {collectable } from '../../server/routes/collectables'
-import { Popover } from 'solid-simple-popover'
-import { flip } from "@floating-ui/dom";
 
 function App() {
-  const [count, setCount] = createSignal(0)
   const [item, setItem] = createSignal<collectable|undefined>(undefined)
   const [collectables, setCollectables] = createSignal<collectable[]>([])
 
