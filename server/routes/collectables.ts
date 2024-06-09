@@ -12,37 +12,37 @@ const collectableItems: collectable[] = [
   {
     name: "Pufflitariot",
     rarity: "legendary",
-    img: "public/images/puffletariot.png", 
+    img: "/images/puffletariot.png", 
   },
   {
     name: "Bomb Squad Puff",
     rarity: "rare",
-    img: "public/images/bomb_squad_puff.png", 
+    img: "/images/bomb_squad_puff.png", 
   },
   {
     name: "Talking Puff",
     rarity: "common",
-    img: "public/images/base_puff.png", 
+    img: "/images/base_puff.png", 
   },
   {
     name: "Accountant Puff",
     rarity: "super rare",
-    img: "public/images/accountant_puff.png", 
+    img: "/images/accountant_puff.png", 
   },
   {
     name: "HR Puff",
     rarity: "uncommon",
-    img: "public/images/legal_puff.png", 
+    img: "/images/legal_puff.png", 
   },
   {
     name: "Legal Puff",
     rarity: "rare",
-    img: "public/images/legal_puff.png", 
+    img: "/images/legal_puff.png", 
   },
   {
     name: "Daredevil Puff",
     rarity: "ultra rare",
-    img: "public/images/daredevil_puff.png", 
+    img: "/images/daredevil_puff.png", 
   },
 ]
 
