@@ -1,6 +1,12 @@
 import { createSignal, createEffect, Show } from 'solid-js'
 import './App.css'
-import type {collectable } from '../../server/routes/collectables'
+
+export type collectable = {
+  name: string,
+  rarity: string,
+  img: string,
+}
+
 
 function App() {
   const [item, setItem] = createSignal<collectable|undefined>(undefined)
