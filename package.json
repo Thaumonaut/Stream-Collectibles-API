@@ -1,16 +1,21 @@
 {
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "tsx watch --no-cache server/index.ts",
-    "build": "pnpm install",
-    "start": "tsx server/index.ts"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@hono/node-server": "^1.11.2",
-    "dotenv": "^16.4.5",
-    "hono": "^4.4.4"
+    "@floating-ui/dom": "^1.6.5",
+    "solid-js": "^1.8.15",
+    "solid-simple-popover": "^2.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.17",
-    "tsx": "^4.7.1"
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vite-plugin-solid": "^2.10.2"
   }
 }
