@@ -1,31 +1,62 @@
-import { createSignal, createEffect } from 'solid-js'
+import { createSignal, createEffect, Show } from 'solid-js'
 import './App.css'
+import type {collectable } from '../../server/routes/collectables'
+import { Popover } from 'solid-simple-popover'
+import { flip } from "@floating-ui/dom";
 
 function App() {
   const [count, setCount] = createSignal(0)
-  const [collecible, setCollectible] = createSignal(0)
+  const [item, setItem] = createSignal<collectable|undefined>(undefined)
+  const [collectables, setCollectables] = createSignal<collectable[]>([])
 
   createEffect(async ()=> {
-    getCollectibles()
+    getCollectables()
 
   })
 
-  const getCollectibles = async function() {
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/collectibles/${count()}`)
+  const getCollectables = async function() {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/collectables/`)
     const data = await res.json();
-    setCollectible(data.Result)
+    setCollectables(data)
+  }
+
+  const getRandomCollectable = async function() {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/collectables/random`)
+    const data: collectable = await res.json()
+    setItem(data);
   }
 
   return (
     <>
-      <h1>Vite + Solid</h1>
+      <h1>Stream Collectables</h1>
       <div class="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count()}
+        <Show when={item()}>
+          <div class='card'>
+            <p style={{
+              "font-size": "2rem", 
+              "line-height": "1rem",
+              "font-weight": 800,
+            }}> {item()?.name} </p>
+            <img src={item()?.img} alt="" />
+          </div>
+        </Show>
+        <button onClick={() => getRandomCollectable()}>
+          Try your luck!
         </button>
-        <p>
-          {collecible()}
-        </p>
+        <h2>Current Collectables</h2>
+        <Show when={collectables()}>
+          <ul style={{"list-style": "none", 
+            "text-align": 'left'
+          }}>
+            {collectables().map(c => {
+              return (
+                <li>
+                  {c.name} : {c.rarity}
+                </li>
+              )
+              })}
+          </ul>
+        </Show>
       </div>
     </>
   )
