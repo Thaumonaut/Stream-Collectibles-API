@@ -13,7 +13,7 @@ export const itemsTable = pgTable('items', {
   item_id: serial('item_id').primaryKey(),
   item_name: text('item_name').notNull(),
   item_img: text('item_img'),
-  item_rarity: rarityEnum('rarity').notNull(),
+  rarity: rarityEnum('rarity').notNull(),
 });
 
 
