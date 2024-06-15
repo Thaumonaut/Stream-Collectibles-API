@@ -13,14 +13,16 @@ const app = new Hono()
 
 app.get('/', c => c.html("<h1>Welcome to Stream Colletibles</h1><p>To use the api go to '/api' to get started</p>"))
 
-app.use(secureHeaders())
 app.use(trimTrailingSlash())
-app.use('*', cors({
-  origin: '*',
-  allowHeaders: ['Origin', 'Content-Type', 'Authorization'],
-  allowMethods: ['GET', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
-  // credentials: true,
-}))
+// app.use('*', cors({
+//   origin: '*',
+//   allowHeaders: ['Origin', 'Content-Type', 'Authorization'],
+//   allowMethods: ['GET', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
+//   // credentials: true,
+// }))
+app.use("*", cors())
+app.use("*", secureHeaders())
+
 app.get('/api', (c) => {
   return c.text("Welcome to the Stream Collectables API")
 })

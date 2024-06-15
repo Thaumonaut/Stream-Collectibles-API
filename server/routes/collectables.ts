@@ -112,10 +112,12 @@ collectable
     const item_id = parseInt(c.req.param().item_id)
     return c.json(collectableItems[item_id])
   })
-  .post('/random', async (c) => {
+  .get('/random', async (c) => {
     // Change implimentation of weighted random selection
     // const pity = 90
-    const { pity } = await c.req.json().catch((e) => console.log(e))
+    const amount = await c.req.query("amount") || "1"
+    let PullAmount: number = parseInt(amount)
+    const items:collectable[] = []
 
     const weights = [
       ["common", 553],
@@ -127,14 +129,14 @@ collectable
     ]
 
     // console.log(pity, weights.flatMap(a => a[0]) )
+    for (let i = 0; i < PullAmount; i++) {
+      const randomRarity = weightedRandom2(weights.flatMap(a => a[0]), weights.flatMap(a => a[1]))
+      const filteredByRarity = collectableItems.filter((c) => c.rarity == randomRarity?.item)
+      const item = filteredByRarity[Math.floor(Math.random() * filteredByRarity.length)]
+      items.push(item)
+    }
 
-    const randomRarity = weightedRandom2(weights.flatMap(a => a[0]), weights.flatMap(a => a[1]))
-    const filteredByRarity = collectableItems.filter((c) => c.rarity == randomRarity?.item)
-    const rng = Math.floor(filteredByRarity.length * Math.random())
-    // console.log(filteredByRarity, rng, randomRarity)
-    const item = filteredByRarity[Math.floor(Math.random() * filteredByRarity.length)]
-
-    return c.json(item)
+    return c.json(items)
   })
   .post('/', (c) => {return c.text('TODO')}) //Add new collectable to the database
 
