@@ -1,123 +1,130 @@
 import { Hono } from "hono";
+import { db } from "../database/index.js"
+import type { SelectPuff } from '../database/schema/collectables.js'
+import { sql } from "drizzle-orm";
 
 const collectable = new Hono()
 
-export type collectable = {
-  name: string,
-  rarity: string,
-  img: string,
-}
+// export type collectable = {
+//   name: string,
+//   rarity: string,
+//   img: string,
+// }
 
-const collectableItems: collectable[] = [
-  {
-    name: "Working Puff",
-    rarity: "common",
-    img: "/images/base_puff.png", 
-  },
-  {
-    name: "Pi Puff",
-    rarity: "common",
-    img: "/images/base_puff.png", 
-  },
-  {
-    name: "Janitor Puff",
-    rarity: "common",
-    img: "/images/base_puff.png", 
-  },
-  {
-    name: "HR Puff",
-    rarity: "uncommon",
-    img: "/images/legal_puff.png", 
-  },
-  {
-    name: "Maintenance Puff",
-    rarity: "uncommon",
-    img: "/images/legal_puff.png", 
-  },
-  {
-    name: "Cameraman Puff",
-    rarity: "uncommon",
-    img: "/images/legal_puff.png", 
-  },
-  {
-    name: "HR Puff",
-    rarity: "uncommon",
-    img: "/images/legal_puff.png", 
-  },
-  {
-    name: "Yandere Puff",
-    rarity: "uncommon",
-    img: "/images/legal_puff.png", 
-  },
-  {
-    name: "Legal Puff",
-    rarity: "rare",
-    img: "/images/legal_puff.png", 
-  },
-  {
-    name: "Puff P.I.",
-    rarity: "rare",
-    img: "/images/legal_puff.png", 
-  },
-  {
-    name: "Bomb Squad Puff",
-    rarity: "rare",
-    img: "/images/bomb_squad_puff.png", 
-  },
-  {
-    name: "Bouncer Puff",
-    rarity: "rare",
-    img: "/images/bomb_squad_puff.png", 
-  },
-  {
-    name: "Accountant Puff",
-    rarity: "super rare",
-    img: "/images/accountant_puff.png", 
-  },
-  {
-    name: "Puff-u-pine",
-    rarity: "super rare",
-    img: "/images/base_puff.png", 
-  },
-  {
-    name: "Puff-apple",
-    rarity: "super rare",
-    img: "/images/base_puff.png", 
-  },
-  {
-    name: "Daredevil Puff",
-    rarity: "ultra rare",
-    img: "/images/daredevil_puff.png", 
-  },
-  {
-    name: "Agent Puff",
-    rarity: "ultra rare",
-    img: "/images/daredevil_puff.png", 
-  },
-  {
-    name: "Pufflitariot",
-    rarity: "legendary",
-    img: "/images/puffletariot.png", 
-  },
-  {
-    name: "THE Talking Puff",
-    rarity: "legendary",
-    img: "/images/base_puff.png", 
-  },
-]
+// const collectableItems: collectable[] = [
+//   {
+//     name: "Working Puff",
+//     rarity: "common",
+//     img: "/images/base_puff.png", 
+//   },
+//   {
+//     name: "Pi Puff",
+//     rarity: "common",
+//     img: "/images/base_puff.png", 
+//   },
+//   {
+//     name: "Janitor Puff",
+//     rarity: "common",
+//     img: "/images/base_puff.png", 
+//   },
+//   {
+//     name: "HR Puff",
+//     rarity: "uncommon",
+//     img: "/images/legal_puff.png", 
+//   },
+//   {
+//     name: "Maintenance Puff",
+//     rarity: "uncommon",
+//     img: "/images/legal_puff.png", 
+//   },
+//   {
+//     name: "Cameraman Puff",
+//     rarity: "uncommon",
+//     img: "/images/legal_puff.png", 
+//   },
+//   {
+//     name: "Yandere Puff",
+//     rarity: "uncommon",
+//     img: "/images/legal_puff.png", 
+//   },
+//   {
+//     name: "Legal Puff",
+//     rarity: "rare",
+//     img: "/images/legal_puff.png", 
+//   },
+//   {
+//     name: "Puff P.I.",
+//     rarity: "rare",
+//     img: "/images/legal_puff.png", 
+//   },
+//   {
+//     name: "Bomb Squad Puff",
+//     rarity: "rare",
+//     img: "/images/bomb_squad_puff.png", 
+//   },
+//   {
+//     name: "Bouncer Puff",
+//     rarity: "rare",
+//     img: "/images/bomb_squad_puff.png", 
+//   },
+//   {
+//     name: "Accountant Puff",
+//     rarity: "super rare",
+//     img: "/images/accountant_puff.png", 
+//   },
+//   {
+//     name: "Puff-u-pine",
+//     rarity: "super rare",
+//     img: "/images/base_puff.png", 
+//   },
+//   {
+//     name: "Puff-apple",
+//     rarity: "super rare",
+//     img: "/images/base_puff.png", 
+//   },
+//   {
+//     name: "Daredevil Puff",
+//     rarity: "ultra rare",
+//     img: "/images/daredevil_puff.png", 
+//   },
+//   {
+//     name: "Agent Puff",
+//     rarity: "ultra rare",
+//     img: "/images/daredevil_puff.png", 
+//   },
+//   {
+//     name: "Pufflitariot",
+//     rarity: "legendary",
+//     img: "/images/puffletariot.png", 
+//   },
+//   {
+//     name: "THE Talking Puff",
+//     rarity: "legendary",
+//     img: "/images/base_puff.png", 
+//   },
+// ]
+
+let collectablesList:SelectPuff[];
+
 
 collectable
-  .get('/', (c) => c.json(collectableItems))
+  .use('/*', async (_c, next) => {
+    collectablesList = await db.execute(sql`SELECT * FROM items`)
+    next()
+  })
+  .get('/', (c) => c.json(collectablesList))
   .get('/single/:item_id', (c) => {
     const item_id = parseInt(c.req.param().item_id)
-    return c.json(collectableItems[item_id])
+    return c.json(collectablesList[item_id])
   })
   .get('/random', async (c) => {
     // Change implimentation of weighted random selection
     // const pity = 90
     const amount = await c.req.query("amount") || "1"
     let PullAmount: number = parseInt(amount)
-    const items:collectable[] = []
+    const items:SelectPuff[] = []
+
+    // console.log(collectablesList)
 
     const weights = [
       ["common", 553],
@@ -131,7 +138,7 @@ collectable
     // console.log(pity, weights.flatMap(a => a[0]) )
     for (let i = 0; i < PullAmount; i++) {
       const randomRarity = weightedRandom2(weights.flatMap(a => a[0]), weights.flatMap(a => a[1]))
-      const filteredByRarity = collectableItems.filter((c) => c.rarity == randomRarity?.item)
+      const filteredByRarity = collectablesList.filter((c) => c.item_rarity == randomRarity?.item)
       const item = filteredByRarity[Math.floor(Math.random() * filteredByRarity.length)]
       items.push(item)
     }
