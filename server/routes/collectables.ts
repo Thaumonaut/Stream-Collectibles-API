@@ -2,23 +2,23 @@ import { Hono } from "hono";
 import { db } from "../database/index.js"
 import {itemsTable} from '../database/schema/collectables.js'
 import type { SelectPuff } from '../database/schema/collectables.js'
+import { eq, sql } from "drizzle-orm";
 
 const collectable = new Hono()
 
-
 let collectablesList:SelectPuff[];
 
-
 collectable
+  .get('/single/:item_id', async (c) => {
+    const item_id = parseInt(c.req.param().item_id)
+    const data = await db.select().from(itemsTable).where(eq(itemsTable.item_id, item_id))
+    return c.json(data)
+  })
   .use('/*', async (_c, next) => {
     collectablesList = await db.select().from(itemsTable).orderBy(itemsTable.rarity)
     await next()
   })
   .get('/', (c) => c.json(collectablesList))
-  .get('/single/:item_id', (c) => {
-    const item_id = parseInt(c.req.param().item_id)
-    return c.json(collectablesList[item_id])
-  })
   .get('/random', async (c) => {
     // Change implimentation of weighted random selection
     // const pity = 90

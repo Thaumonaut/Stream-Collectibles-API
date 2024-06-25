@@ -6,6 +6,7 @@ import { trimTrailingSlash } from 'hono/trailing-slash'
 import 'dotenv/config'
 
 import collectableRoute from './routes/collectables'
+import UsersRoute from './routes/users'
 
 // import {App as Dashboard} from './pages/dashboard'
 
@@ -31,6 +32,7 @@ app.get('/api/2/electric-boogaloo', c => c.text('Testing api 2'))
 
 
 app.route('/api/collectables', collectableRoute)
+app.route('/', UsersRoute)
 
 const port = parseInt(process.env.PORT!)
 const host = process.env.HOST!
